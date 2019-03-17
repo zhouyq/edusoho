@@ -1,11 +1,10 @@
 FROM php:5.6.37-apache-stretch
 
-ENV EDU_VER="8.3.1"
+ENV EDU_VER="8.3.20"
 
 RUN set -ex \
     && sed -i 's/deb.debian.org/mirrors.aliyun.com/g' /etc/apt/sources.list \
-    && curl http://download.edusoho.com/edusoho-${EDU_VER}.tar.gz | tar xzm -C /var/www/html/ \
-    && chown www-data:www-data /var/www/html/ -R \
+    && curl http://download.edusoho.com/edusoho-${EDU_VER}.tar.gz  -o /tmp/edusoho.tar.gz \
     && apt-get update \
     && apt-get install -y libfreetype6-dev libjpeg62-turbo-dev libpng-dev libmcrypt-dev libicu-dev libapache2-mod-xsendfile\
     && docker-php-ext-install -j$(nproc) iconv \
@@ -21,6 +20,8 @@ COPY edusoho.conf /etc/apache2/sites-available/000-default.conf
 COPY docker-entrypoint.sh /usr/local/bin/
 
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+VOLUME /var/www/html
 
 WORKDIR /var/www/html
 

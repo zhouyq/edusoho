@@ -10,6 +10,12 @@ EOF
 # enable apache rewrite
 ln -s /etc/apache2/mods-available/rewrite.load  /etc/apache2/mods-enabled/
 
+# init edusoho files
+if [ ! -d /var/www/html/edusoho ];then
+    tar xzf /tmp/edusoho.tar.gz -C  /var/www/html/
+    chown www-data:www-data /var/www/html/ -R 
+fi
+
 
 # first arg is `-f` or `--some-option`
 if [ "${1#-}" != "$1" ]; then
